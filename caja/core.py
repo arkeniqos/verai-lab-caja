@@ -64,5 +64,7 @@ def _ancla_c():
 # === ZONA META (UW-06) ============================================
 # UW-06 registra sus comandos SOLO entre esta linea y el marcador
 # "fin ZONA META". Ningun otro worker toca esta zona.
+from caja import version as _version
+REGISTRY["version"] = _version.version
 # === fin ZONA META ================================================
 # ==================================================================
