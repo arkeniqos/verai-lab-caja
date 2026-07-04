@@ -7,6 +7,7 @@ permissions:
   contents: read
   pull-requests: write
   issues: write
+  id-token: write  # OIDC para el intercambio OAuth de claude-code-action
 
 jobs:
   review:
