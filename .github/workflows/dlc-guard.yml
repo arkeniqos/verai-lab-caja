@@ -1,0 +1,70 @@
+name: DLC Guard
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  dlc-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Spec sellado intocable
+        run: |
+          BASE="${{ github.event.pull_request.base.sha }}"
+          HEAD="${{ github.event.pull_request.head.sha }}"
+          CAMBIOS=$(git diff --name-only "$BASE" "$HEAD")
+          if echo "$CAMBIOS" | grep -E '^specs/' >/dev/null; then
+            # El flag debe existir YA en la rama base (lo crea el router del
+            # fundador): un PR que lo trae consigo no cuenta — eso seria un
+            # agente minteando su propio permiso (auditoria final, Viktor F2).
+            if ! git show "$BASE:dlc/CAMBIO_SPEC_ABIERTO.md" >/dev/null 2>&1; then
+              echo "::error::PR toca specs/ sin Solicitud de Cambio de Spec abierta en la rama base."
+              exit 1
+            fi
+          fi
+          if echo "$CAMBIOS" | grep -q '^dlc/ESTADO.md'; then
+            echo "::error::PR de agente no debe tocar dlc/ESTADO.md (lo escribe el router)."
+            exit 1
+          fi
+      - name: Paths DLC intocables (solo branches de agentes)
+        run: |
+          BRANCH="${{ github.event.pull_request.head.ref }}"
+          if ! echo "$BRANCH" | grep -qiE '^uw-[0-9]+'; then
+            echo "Branch sin patron uw-nn: no aplica (modo mob u otro flujo)."
+            exit 0
+          fi
+          BASE="${{ github.event.pull_request.base.sha }}"
+          HEAD="${{ github.event.pull_request.head.sha }}"
+          # .github/ incluido: un worker inyectado NO puede reescribir su propia
+          # compuerta de CI dentro del PR (evaluacion panel mundial, C-05).
+          MAL=$(git diff --name-only "$BASE" "$HEAD" | grep -E '^(dlc/|docs/tasks/|\.github/)' || true)
+          if [ -n "$MAL" ]; then
+            echo "::error::PR de agente toca paths out-of-scope (dlc/, docs/tasks/ o .github/ — los escribe el router/fundador):"
+            echo "$MAL"
+            exit 1
+          fi
+      - name: Trazabilidad UW (branch <-> commits)
+        run: |
+          BRANCH="${{ github.event.pull_request.head.ref }}"
+          UW=$(echo "$BRANCH" | grep -oiE '^uw-[0-9]+' | tr '[:lower:]' '[:upper:]' || true)
+          if [ -z "$UW" ]; then
+            echo "Branch sin patron uw-nn: guard no aplica (modo mob u otro flujo)."
+            exit 0
+          fi
+          BASE="${{ github.event.pull_request.base.sha }}"
+          HEAD="${{ github.event.pull_request.head.sha }}"
+          # --no-merges: los merge commits de 'Update branch'/merge de main no
+          # llevan prefijo UW y son legitimos; excluirlos evita NO-GO falsos en
+          # el ciclo de rework (C-12).
+          MAL=$(git log --no-merges --format='%s' "$BASE".."$HEAD" | grep -viE "^${UW}:" || true)
+          if [ -n "$MAL" ]; then
+            echo "::error::Commits sin prefijo ${UW}: en branch ${BRANCH}:"
+            echo "$MAL"
+            exit 1
+          fi
