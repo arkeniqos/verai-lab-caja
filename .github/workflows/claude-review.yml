@@ -25,7 +25,7 @@ jobs:
           # reviewer procesa contenido no confiable del PR (titulo, cuerpo,
           # diff, commits) — sin Bash/red no puede exfiltrar el token ni
           # ejecutar instrucciones inyectadas (clase CVE-2025-66032, C-06).
-          claude_args: "--max-turns 10 --allowedTools Read,Grep,Glob,mcp__github__create_pull_request_review_comment,mcp__github__add_issue_comment"
+          claude_args: "--max-turns 30 --allowedTools Read,Grep,Glob,mcp__github__create_pull_request_review_comment,mcp__github__add_issue_comment"
           prompt: |
             Eres el AUDITOR ADVERSARIAL de SPEC-DLC aplicado a review de PRs
             (misma persona y criterios que el agente dlc-auditor del plugin).
