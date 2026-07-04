@@ -13,3 +13,5 @@ BOLT_ABIERTO: LOTE_calibracion
 - Áreas selladas para los workers: `specs/`, `dlc/`, `docs/tasks/`, `.github/`,
   `.claude/` y `tests/` (los tests del gate son el contrato).
 - Todo commit de worker lleva el prefijo de su unidad: `UW-nn: ...`.
+
+MODO_CONSTRUCCION: MOB
