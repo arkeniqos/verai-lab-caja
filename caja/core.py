@@ -45,6 +45,9 @@ def _ancla_b():
 # === ZONA TEXTO (UW-03) ===========================================
 # UW-03 registra sus comandos SOLO entre esta linea y el marcador
 # "fin ZONA TEXTO". Ningun otro worker toca esta zona.
+from caja import texto
+REGISTRY["slug"] = texto.slug
+REGISTRY["palabras"] = texto.contar_palabras
 # === fin ZONA TEXTO ===============================================
 # ==================================================================
 
