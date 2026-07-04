@@ -32,6 +32,9 @@ def _ancla_a():
 # Patron:
 #   from caja import comandos_num
 #   REGISTRY["media"] = comandos_num.cmd_media
+from caja import comandos_num
+REGISTRY["media"] = comandos_num.cmd_media
+REGISTRY["mediana"] = comandos_num.cmd_mediana
 # === fin ZONA NUMEROS =============================================
 # ==================================================================
 
