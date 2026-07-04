@@ -4,6 +4,8 @@ blockedBy: []
 riesgo: bajo
 tipo: feature
 tamano: S
+paths:
+  - caja/stats.py
 ---
 
 ## Summary

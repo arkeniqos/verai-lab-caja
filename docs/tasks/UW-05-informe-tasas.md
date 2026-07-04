@@ -4,6 +4,8 @@ blockedBy: [UW-04]
 riesgo: bajo
 tipo: feature
 tamano: S
+paths:
+  - caja/informe_tasas.py
 ---
 
 ## Summary

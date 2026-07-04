@@ -4,6 +4,9 @@ blockedBy: [UW-01]
 riesgo: bajo
 tipo: feature
 tamano: S
+paths:
+  - caja/comandos_num.py
+  - caja/core.py
 ---
 
 ## Summary

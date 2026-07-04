@@ -4,6 +4,9 @@ blockedBy: [UW-01]
 riesgo: bajo
 tipo: feature
 tamano: S
+paths:
+  - caja/texto.py
+  - caja/core.py
 ---
 
 ## Summary

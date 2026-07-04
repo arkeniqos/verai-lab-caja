@@ -4,6 +4,8 @@ blockedBy: []
 riesgo: medio
 tipo: feature
 tamano: S
+paths:
+  - caja/sync_tasas.py
 ---
 
 ## Summary
